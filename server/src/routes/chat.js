@@ -1,29 +1,53 @@
 import express from "express";
 
-import { askAI } from "../ai/index.js";
+import { askAI } from "../ai/ollama.js";
+
+import { executeCommand } from "../commands/commandRouter.js";
 
 const router = express.Router();
 
 router.post("/", async (req, res) => {
 
+    const { message } = req.body;
+
     try {
 
-        const { message } = req.body;
+        const command = await executeCommand(message);
 
-        const reply = await askAI(message);
+        if (command) {
+
+            return res.json({
+
+                success: true,
+
+                reply: command,
+
+            });
+
+        }
+
+        const aiReply = await askAI(message);
 
         res.json({
+
             success: true,
-            reply,
+
+            reply: aiReply,
+
         });
 
-    } catch (error) {
+    }
 
-        console.log("error", error);
+    catch (err) {
+
+        console.log(err);
 
         res.status(500).json({
+
             success: false,
-            message: error.message,
+
+            message: err.message,
+
         });
 
     }
