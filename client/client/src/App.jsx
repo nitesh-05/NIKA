@@ -1,29 +1,21 @@
-import { useState } from "react";
 import Header from "./components/Header";
 import ChatWindow from "./components/ChatWindow";
 import ChatInput from "./components/ChatInput";
 
-function App() {
+export default function App() {
 
-  const [messages, setMessages] = useState([
-    {
-      sender: "ai",
-      text: "Hello Nitesh 👋......",
-    },
-  ]);
+    return (
 
-  return (
-    <div className="h-screen bg-gray-950 text-white flex flex-col">
-      <Header />
+        <div className="h-screen bg-gray-950 text-white flex flex-col">
 
-      <ChatWindow messages={messages} />
+            <Header />
 
-      <ChatInput
-        messages={messages}
-        setMessages={setMessages}
-      />
-    </div>
-  );
+            <ChatWindow />
+
+            <ChatInput />
+
+        </div>
+
+    );
+
 }
-
-export default App;

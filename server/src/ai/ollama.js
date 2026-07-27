@@ -1,19 +1,33 @@
 import ollama from "ollama";
 
-export async function askAI(message) {
-  const response = await ollama.chat({
-    model: "llama3.2",
-    messages: [
-      {
-        role: "system",
-        content: "You are NIKA AI, a smart personal assistant.",
-      },
-      {
-        role: "user",
-        content: message,
-      },
-    ],
-  });
+import {
+  addMessage,
+  getHistory,
+} from "./memory.js";
 
-  return response.message.content;
+export async function askAI(message) {
+  try {
+    // Save user message
+    addMessage("user", message);
+
+    // Get complete conversation
+    const messages = getHistory();
+
+    // Send to Ollama
+    const response = await ollama.chat({
+      model: "llama3.2",
+      messages,
+    });
+
+    // AI Reply
+    const aiReply = response.message.content;
+
+    // Save AI reply
+    addMessage("assistant", aiReply);
+
+    return aiReply;
+  } catch (error) {
+    console.error("Ollama Error:", error);
+    throw error;
+  }
 }

@@ -1,17 +1,31 @@
 import Message from "./Message";
 
-export default function ChatWindow({ messages }) {
-  return (
-    <div className="flex-1 overflow-y-auto p-6 space-y-4">
+import { useChat } from "../context/ChatContext";
 
-      {messages.map((msg, index) => (
-        <Message
-          key={index}
-          sender={msg.sender}
-          text={msg.text}
-        />
-      ))}
+export default function ChatWindow() {
 
-    </div>
-  );
+    const { messages } = useChat();
+
+    return (
+
+        <div className="flex-1 overflow-y-auto p-5 space-y-4">
+
+            {messages.map((message, index) => (
+
+                <Message
+
+                    key={index}
+
+                    sender={message.sender}
+
+                    text={message.text}
+
+                />
+
+            ))}
+
+        </div>
+
+    );
+
 }
