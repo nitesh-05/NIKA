@@ -1,33 +1,27 @@
 import ollama from "ollama";
-
-import {
-  addMessage,
-  getHistory,
-} from "./memory.js";
+import { SYSTEM_PROMPT } from "./prompts.js";
 
 export async function askAI(message) {
+  const response = await ollama.chat({
+    model: "llama3.2",
+    messages: [
+      {
+        role: "system",
+        content: SYSTEM_PROMPT,
+      },
+      {
+        role: "user",
+        content: message,
+      },
+    ],
+  });
+
   try {
-    // Save user message
-    addMessage("user", message);
-
-    // Get complete conversation
-    const messages = getHistory();
-
-    // Send to Ollama
-    const response = await ollama.chat({
-      model: "llama3.2",
-      messages,
-    });
-
-    // AI Reply
-    const aiReply = response.message.content;
-
-    // Save AI reply
-    addMessage("assistant", aiReply);
-
-    return aiReply;
-  } catch (error) {
-    console.error("Ollama Error:", error);
-    throw error;
+    return JSON.parse(response.message.content);
+  } catch {
+    return {
+      type: "chat",
+      response: response.message.content,
+    };
   }
 }

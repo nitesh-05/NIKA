@@ -1,57 +1,52 @@
 import express from "express";
-
 import { askAI } from "../ai/ollama.js";
-
-import { executeCommand } from "../commands/commandRouter.js";
+import { executeTool } from "../tools/dispatcher.js";
 
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-
+  try {
     const { message } = req.body;
 
-    try {
-
-        const command = await executeCommand(message);
-
-        if (command) {
-
-            return res.json({
-
-                success: true,
-
-                reply: command,
-
-            });
-
-        }
-
-        const aiReply = await askAI(message);
-
-        res.json({
-
-            success: true,
-
-            reply: aiReply,
-
-        });
-
+    if (!message || !message.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Message is required.",
+      });
     }
 
-    catch (err) {
+    // Ask AI
+    const ai = await askAI(message);
 
-        console.log(err);
+    console.log("AI Response:", ai);
 
-        res.status(500).json({
+    // Tool Call
+    if (ai.type === "tool") {
+      const result = await executeTool(
+        ai.tool,
+        ai.arguments
+      );
 
-            success: false,
-
-            message: err.message,
-
-        });
-
+      return res.json({
+        success: true,
+        reply: result,
+      });
     }
 
+    // Normal Chat
+    return res.json({
+      success: true,
+      reply: ai.response,
+    });
+
+  } catch (err) {
+    console.error("Chat Route Error:", err);
+
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Internal Server Error",
+    });
+  }
 });
 
 export default router;

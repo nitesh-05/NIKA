@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import "./tools/registerTools.js";
 
 dotenv.config();
 console.log("API Key:", process.env.OPENAI_API_KEY);
