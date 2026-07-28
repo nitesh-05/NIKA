@@ -1,16 +1,11 @@
 import { executeTool } from "../tools/dispatcher.js";
+import { observe } from "./observer.js";
 
-export async function executePlan(plan) {
-  const results = [];
+export async function executeTask(task) {
+  const result = await executeTool(
+    task.tool,
+    task.arguments
+  );
 
-  for (const task of plan) {
-    const result = await executeTool(
-      task.tool,
-      task.arguments
-    );
-
-    results.push(result);
-  }
-
-  return results;
+  return observe(result);
 }
