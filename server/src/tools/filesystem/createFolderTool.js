@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { Tool } from "../base/Tool.js";
+import { resolveUserPath } from "./pathResolver.js";
 
 export const createFolderTool = new Tool({
   name: "create_folder",
@@ -24,7 +25,8 @@ export const createFolderTool = new Tool({
 
   async execute(args) {
     try {
-      const folderPath = path.resolve(args.path);
+      // const folderPath = path.resolve(args.path);
+      const folderPath = resolveUserPath(args.path);
 
       if (fs.existsSync(folderPath)) {
         return `Folder already exists: ${folderPath}`;
