@@ -1,15 +1,13 @@
 import { registry } from "./registry/ToolRegistry.js";
 
-export async function executeTool(name,args){
+export async function executeTool(name, args) {
+  if (!registry.has(name)) {
+    throw new Error(`Unknown tool: ${name}`);
+  }
 
-    const tool=registry.get(name);
+  const tool = registry.get(name);
 
-    if(!tool){
+  console.log("Running Tool:", tool.name);
 
-        throw new Error("Tool not found");
-
-    }
-
-    return await tool.execute(args);
-
+  return await tool.execute(args);
 }

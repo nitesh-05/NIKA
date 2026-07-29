@@ -1,15 +1,17 @@
 export class Tool {
-
-    constructor(config){
-
-        this.name = config.name;
-
-        this.description = config.description;
-
-        this.schema = config.schema;
-
-        this.execute = config.execute;
-
-    }
-
+  constructor({
+    name,
+    description,
+    schema,
+    aliases = [],
+    examples = [],
+    execute,
+  }) {
+    this.name = name;
+    this.description = description;
+    this.schema = schema;
+    this.aliases = aliases;
+    this.examples = examples;
+    this.execute = execute;
+  }
 }

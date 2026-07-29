@@ -1,23 +1,23 @@
-class ToolRegistry{
+class ToolRegistry {
+  constructor() {
+    this.tools = new Map();
+  }
 
-    constructor(){
+  register(tool) {
+    this.tools.set(tool.name, tool);
+  }
 
-        this.tools=new Map();
+  get(name) {
+    return this.tools.get(name);
+  }
 
-    }
+  getAll() {
+    return [...this.tools.values()];
+  }
 
-    register(tool){
-
-        this.tools.set(tool.name,tool);
-
-    }
-
-    get(name){
-
-        return this.tools.get(name);
-
-    }
-
+  has(name) {
+    return this.tools.has(name);
+  }
 }
 
-export const registry=new ToolRegistry();
+export const registry = new ToolRegistry();

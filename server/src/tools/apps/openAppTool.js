@@ -1,53 +1,55 @@
+import { exec } from "child_process";
 import { Tool } from "../base/Tool.js";
 
-import { exec } from "child_process";
-
 export const openAppTool = new Tool({
+  name: "open_app",
 
-    name:"open_app",
+  description: "Open installed Windows applications.",
 
-    description:"Open desktop applications",
+  aliases: [
+    "open chrome",
+    "launch browser",
+    "start chrome",
+    "open google",
+    "open vscode",
+    "open calculator",
+    "open notepad",
+  ],
 
-    schema:{
-        app:"string"
-    },
+  examples: [
+    "Open Chrome",
+    "Launch Browser",
+    "Open VS Code",
+    "Open Calculator",
+    "Open Notepad",
+  ],
 
-    async execute(args){
+  schema: {
+    app: "string",
+  },
 
-        const app=args.app.toLowerCase();
+  async execute(args) {
+    const app = args.app.toLowerCase();
 
-        switch(app){
+    switch (app) {
+      case "chrome":
+        exec("start chrome");
+        return "Opening Chrome";
 
-            case "chrome":
+      case "vscode":
+        exec("code");
+        return "Opening VS Code";
 
-                exec("start chrome");
+      case "notepad":
+        exec("notepad");
+        return "Opening Notepad";
 
-                return "Opening Chrome";
+      case "calculator":
+        exec("calc");
+        return "Opening Calculator";
 
-            case "vscode":
-
-                exec("code");
-
-                return "Opening VS Code";
-
-            case "notepad":
-
-                exec("notepad");
-
-                return "Opening Notepad";
-
-            case "calculator":
-
-                exec("calc");
-
-                return "Opening Calculator";
-
-            default:
-
-                return "Application not found.";
-
-        }
-
+      default:
+        return `Unknown application: ${app}`;
     }
-
+  },
 });

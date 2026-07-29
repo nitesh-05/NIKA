@@ -1,9 +1,12 @@
 import ollama from "ollama";
 import { SYSTEM_PROMPT } from "./prompts.js";
+// import { buildSystemPrompt } from "./promptBuilder.js";
 import { memory } from "../agent/memory.js";
 import { config } from "../config/config.js";
+import { parseAIResponse } from "./parser.js";
 
 export async function askAI(userMessage) {
+  // console.log(buildSystemPrompt());
   try {
     // Save user message
     memory.add("user", userMessage);
@@ -13,6 +16,7 @@ export async function askAI(userMessage) {
       {
         role: "system",
         content: SYSTEM_PROMPT,
+        // content: buildSystemPrompt(),
       },
       ...memory.getMessages(),
     ];
@@ -30,7 +34,12 @@ export async function askAI(userMessage) {
 
     // Try parsing JSON
     try {
-      return JSON.parse(aiReply);
+      const parsed = parseAIResponse(aiReply);
+
+      console.log("RAW AI RESPONSE:");
+console.log(aiReply);
+
+      return parsed;
     } catch {
       return {
         type: "chat",

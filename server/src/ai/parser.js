@@ -1,21 +1,21 @@
 export function parseAIResponse(text) {
+  try {
+    // Remove markdown code fences
+    let cleaned = text.trim();
 
-    try {
+    cleaned = cleaned.replace(/^```json/i, "");
+    cleaned = cleaned.replace(/^```/i, "");
+    cleaned = cleaned.replace(/```$/i, "");
+    cleaned = cleaned.trim();
 
-        return JSON.parse(text);
+    // Parse JSON
+    return JSON.parse(cleaned);
+  } catch (err) {
+    console.error("Parser Error:", err);
 
-    }
-
-    catch {
-
-        return {
-
-            type: "chat",
-
-            response: text,
-
-        };
-
-    }
-
+    return {
+      type: "chat",
+      response: text,
+    };
+  }
 }
