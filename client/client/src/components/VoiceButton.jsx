@@ -16,11 +16,11 @@ export default function VoiceButton() {
       // const result = await uploadVoice(audio);
       const result = await uploadVoice(audio);
 
-const player = new Audio(
-    "http://localhost:5000/" + result.audio
-);
+// const player = new Audio(
+//     "http://localhost:5000/" + result.audio
+// );
 
-player.play();
+// player.play();
 
       console.log("Speech:", result.speech);
 

@@ -6,8 +6,13 @@ import { createFolderTool } from "./filesystem/createFolderTool.js";
 import { deleteFolderTool } from "./filesystem/deleteFolderTool.js";
 import { renameFolderTool } from "./filesystem/renameFolderTool.js";
 import { openFolderTool } from "./filesystem/openFolderTool.js";
+import { openWebsiteTool } from "./browser/openWebsiteTool.js";
+import { searchGoogleTool } from "./browser/searchGoogleTool.js";
+
 
 registry.register(openAppTool);
+registry.register(openWebsiteTool);
+registry.register(searchGoogleTool);
 
 registry.register(createFolderTool);
 registry.register(deleteFolderTool);
