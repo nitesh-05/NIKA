@@ -29,7 +29,33 @@ export const openAppTool = new Tool({
   },
 
   async execute(args) {
-    const app = args.app.toLowerCase();
+    let app = args.app.toLowerCase().trim();
+
+    // ------------------------
+    // Normalize application names
+    // ------------------------
+
+    const aliases = {
+      google: "chrome",
+      "google chrome": "chrome",
+      browser: "chrome",
+      "chrome browser": "chrome",
+      chrome: "chrome",
+
+      code: "vscode",
+      vscode: "vscode",
+      "visual studio code": "vscode",
+      "code editor": "vscode",
+
+      calc: "calculator",
+      calculator: "calculator",
+
+      "text editor": "notepad",
+      texteditor: "notepad",
+      notepad: "notepad",
+    };
+
+    app = aliases[app] || app;
 
     switch (app) {
       case "chrome":
@@ -49,7 +75,7 @@ export const openAppTool = new Tool({
         return "Opening Calculator";
 
       default:
-        return `Unknown application: ${app}`;
+        return `Unknown application: ${args.app}`;
     }
   },
 });

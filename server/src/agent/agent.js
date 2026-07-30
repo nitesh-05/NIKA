@@ -1,6 +1,6 @@
-import { detectIntent } from "./router.js";
 import { createTask } from "./planner.js";
 import { executeTask } from "./executor.js";
+import { detectIntent } from "../intent/detectIntent.js";
 
 
 export async function runAgent(userMessage) {
