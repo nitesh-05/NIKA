@@ -1,0 +1,47 @@
+1.
+
+User Voice
+      ↓
+Groq Whisper (Speech → Text)
+      ↓
+NIKA AI
+      ↓
+Text Reply
+      ↓
+Text-to-Speech (TTS)
+      ↓
+Frontend plays audio 🔊
+
+मेरी सलाह यह होगी:
+
+✅ Development के लिए: Browser Speech Synthesis
+✅ Production में बाद में: Dedicated TTS (OpenAI / ElevenLabs / Piper)
+
+इस तरह आप पहले पूरा AI assistant, browser automation, memory, tools, agents आदि बना लेंगे। बाद में सिर्फ TTS layer बदलनी होगी।
+
+2.
+🎤 User
+
+↓
+
+Groq Whisper (Speech → Text)
+
+↓
+
+NIKA AI Backend
+
+↓
+
+JSON Response
+
+↓
+
+Frontend
+
+↓
+
+SpeechSynthesis API
+
+↓
+
+🔊 AI speaks

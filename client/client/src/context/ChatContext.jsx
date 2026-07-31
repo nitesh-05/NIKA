@@ -1,8 +1,11 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const ChatContext = createContext();
 
 export function ChatProvider({ children }) {
+
+
+
 
     const [messages, setMessages] = useState([
         {
@@ -11,6 +14,9 @@ export function ChatProvider({ children }) {
         }
     ]);
 
+        useEffect(() => {
+    console.log("Messages Updated:", messages);
+}, [messages]);
     return (
         <ChatContext.Provider
             value={{

@@ -1,0 +1,75 @@
+.orb{
+
+    width:50px;
+
+    height:50px;
+
+    border-radius:50%;
+
+    margin:auto;
+
+    transition:.3s;
+
+    background:#4f46e5;
+
+}
+
+.orb.listening{
+
+    animation:pulse 1s infinite;
+
+}
+
+.orb.thinking{
+
+    animation:rotate 2s linear infinite;
+
+}
+
+.orb.speaking{
+
+    animation:wave .8s infinite;
+
+}
+
+@keyframes pulse{
+
+0%{transform:scale(1)}
+
+50%{transform:scale(1.1)}
+
+100%{transform:scale(1)}
+
+}
+
+@keyframes rotate{
+
+100%{
+
+transform:rotate(360deg);
+
+}
+
+}
+
+@keyframes wave{
+
+0%{
+
+transform:scale(1);
+
+}
+
+50%{
+
+transform:scale(1.2);
+
+}
+
+100%{
+
+transform:scale(1);
+
+}
+
+}

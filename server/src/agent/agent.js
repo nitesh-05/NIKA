@@ -5,17 +5,17 @@ import { detectIntent } from "../intent/detectIntent.js";
 
 export async function runAgent(userMessage) {
 
-const directIntent = detectIntent(userMessage);
+  const directIntent = detectIntent(userMessage);
 
-if (directIntent) {
-  const observation = await executeTask(directIntent);
+  if (directIntent) {
+    const observation = await executeTask(directIntent);
 
-  if (observation.success) {
-    return observation.result;
+    if (observation.success) {
+      return observation.result;
+    }
+
+    return "Task failed.";
   }
-
-  return "Task failed.";
-}
 
 
   const plan = await createTask(userMessage);
@@ -24,7 +24,10 @@ if (directIntent) {
 
   // Normal Chat
   if (plan.type === "chat") {
-    return plan.response;
+    return {
+      type: "chat",
+      response: plan.response,
+    };
   }
 
   // Single Tool
@@ -32,7 +35,10 @@ if (directIntent) {
     const observation = await executeTask(plan);
 
     if (observation.success) {
-      return observation.result;
+      return {
+        type: "tool",
+        response: observation.result,
+      };
     }
 
     return "Task failed.";
@@ -51,9 +57,14 @@ if (directIntent) {
         results.push("❌ Failed");
       }
     }
-
-    return results.join("\n");
+    return {
+      type: "plan",
+      response: results.join("\n"),
+    };
   }
 
-  return "Unknown AI response.";
+  return {
+    type: "chat",
+    response: "Unknown AI response.",
+  };
 }

@@ -13,7 +13,7 @@ router.post(
   upload.single("audio"),
   async (req, res) => {
     try {
-        console.log("Voice.js=>",req.file);
+      console.log("Voice.js=>", req.file);
       const audioPath = req.file.path;
 
       console.log("Audio:", audioPath);
@@ -24,13 +24,12 @@ router.post(
 
       memory.clear();
       const reply = await runAgent(text);
-    //   const audioFile = await textToSpeech(reply);
 
       return res.json({
         success: true,
         speech: text,
-        reply,
-        // audio: audioFile
+        reply: reply.response,
+        task: reply,
       });
 
     } catch (err) {

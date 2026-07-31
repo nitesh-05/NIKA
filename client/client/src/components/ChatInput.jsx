@@ -4,6 +4,7 @@ import api from "../services/api";
 
 import { useChat } from "../context/ChatContext";
 
+
 export default function ChatInput() {
 
     const [message, setMessage] = useState("");

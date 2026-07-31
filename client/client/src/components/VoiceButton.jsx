@@ -1,32 +1,34 @@
 import { startRecording, stopRecording } from "../voice/recorder";
 import { uploadVoice } from "../voice/api";
+import { speak } from "../voice/speech";
+import { useVoice } from "../context/VoiceContext";
 
 export default function VoiceButton() {
+  const { setStatus } = useVoice();
 
   const handleVoice = async () => {
 
-    await startRecording();
+    setStatus("listening");
 
-    alert("Recording...");
+    await startRecording();
 
     setTimeout(async () => {
 
       const audio = await stopRecording();
 
-      // const result = await uploadVoice(audio);
+      setStatus("thinking");
+
       const result = await uploadVoice(audio);
 
-// const player = new Audio(
-//     "http://localhost:5000/" + result.audio
-// );
+      console.log(result);
+      console.log(result.reply);
+      console.log(typeof result.reply);
 
-// player.play();
+      setStatus("speaking");
 
-      console.log("Speech:", result.speech);
-
-console.log("Reply:", result.reply);
-
-alert(result.reply);
+      speak(result.reply, () => {
+        setStatus("idle");
+      });
 
     }, 5000);
 

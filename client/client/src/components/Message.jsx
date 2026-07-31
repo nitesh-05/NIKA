@@ -3,6 +3,7 @@ export default function Message({
   text,
 }) {
 
+   console.log("Message:", sender, text, typeof text);
   const ai = sender === "ai";
 
   return (
