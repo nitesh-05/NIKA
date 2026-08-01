@@ -8,16 +8,14 @@ router.post("/", async (req, res) => {
 
     const { message } = req.body;
 
-    const agentReply = await runAgent(message);
+    const reply = await runAgent(message);
 
     return res.json({
-      success: true,
-
-      // Frontend chat text
-      reply: agentReply.response,
-
-      // Full object (future use)
-      task: agentReply,
+      success: reply.success,
+      speech: reply.speech,
+      reply: reply.speech,
+      display: reply.display,
+      task: reply.task,
     });
 
   } catch (err) {

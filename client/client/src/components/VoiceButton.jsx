@@ -1,36 +1,65 @@
-import { startRecording, stopRecording } from "../voice/recorder";
+import { startRecording } from "../voice/recorder";
 import { uploadVoice } from "../voice/api";
 import { speak } from "../voice/speech";
 import { useVoice } from "../context/VoiceContext";
+import { useChat } from "../context/ChatContext";
+import { useState } from "react";
 
 export default function VoiceButton() {
-  const { setStatus } = useVoice();
+  const { setMessages } = useChat();
+
+  // const { setStatus, setVolume } = useVoice();
+
+  const voice = useVoice();
+  console.log("Voice Context:", voice);
+  const {
+  setStatus,
+  setVolume,
+} = voice;
 
   const handleVoice = async () => {
 
     setStatus("listening");
 
-    await startRecording();
+    const audio =
+await startRecording(
 
-    setTimeout(async () => {
+(volume)=>{
 
-      const audio = await stopRecording();
+setVolume(volume);
 
-      setStatus("thinking");
+}
 
-      const result = await uploadVoice(audio);
+);
 
-      console.log(result);
-      console.log(result.reply);
-      console.log(typeof result.reply);
+    setStatus("thinking");
 
-      setStatus("speaking");
+    const result = await uploadVoice(audio);
 
-      speak(result.reply, () => {
-        setStatus("idle");
-      });
+    setMessages(prev => [
+      ...prev,
+      ...(result.speech
+        ? [{
+          sender: "user",
+          text: result.speech,
+        }]
+        : []),
+      ...(result.reply
+        ? [{
+          sender: "ai",
+          text: result.reply,
+        }]
+        : []),
+    ]);
 
-    }, 5000);
+    console.log("REPLY",result)
+    setStatus("speaking");
+
+  
+
+      setStatus("idle");
+speak(result.reply);
+  
 
   };
 

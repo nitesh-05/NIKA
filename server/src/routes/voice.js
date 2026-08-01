@@ -23,14 +23,15 @@ router.post(
       console.log("Speech:", text);
 
       memory.clear();
-      const reply = await runAgent(text);
+      const result = await runAgent(text);
 
-      return res.json({
-        success: true,
-        speech: text,
-        reply: reply.response,
-        task: reply,
-      });
+return res.json({
+  success: result.success,
+  speech: text,
+  reply: result.speech,
+  display: result.display,
+  task: result.task,
+});
 
     } catch (err) {
 

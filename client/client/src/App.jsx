@@ -4,6 +4,7 @@ import ChatInput from "./components/ChatInput";
 import VoiceButton from "./components/VoiceButton";
 import VoiceOrb from "./components/VoiceOrb";
 import StatusText from "./components/StatusText";
+import VoiceWave from "./components/VoiceWave";
 
 export default function App() {
 
@@ -13,6 +14,7 @@ export default function App() {
 
             <Header />
            
+           <VoiceWave/>
             <ChatWindow />
             <VoiceOrb/>
 

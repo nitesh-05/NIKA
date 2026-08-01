@@ -8,11 +8,15 @@ export function VoiceProvider({ children }) {
 
   const [conversation, setConversation] = useState([]);
 
+  const [volume, setVolume] = useState(0);
+
   return (
     <VoiceContext.Provider
       value={{
         status,
         setStatus,
+        volume,
+        setVolume,
         conversation,
         setConversation,
       }}

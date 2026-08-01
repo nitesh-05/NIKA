@@ -1,9 +1,27 @@
-let recorder;
-let chunks = [];
+import {
+  createAnalyzer,
+  getVolume,
+  destroyAnalyzer,
+} from "./voiceAnalyzer";
 
-export async function startRecording() {
-  const stream = await navigator.mediaDevices.getUserMedia({
-    audio: true,
+import {
+  detectSilence,
+  resetSilenceDetection,
+} from "./voiceVAD";
+
+let recorder;
+let stream;
+let chunks = [];
+let volumeTimer;
+
+export async function startRecording(onVolume) {
+
+  stream = await navigator.mediaDevices.getUserMedia({
+    audio: {
+      echoCancellation: true,
+      noiseSuppression: true,
+      autoGainControl: true,
+    },
   });
 
   recorder = new MediaRecorder(stream);
@@ -11,22 +29,63 @@ export async function startRecording() {
   chunks = [];
 
   recorder.ondataavailable = (e) => {
-    chunks.push(e.data);
+
+    if (e.data.size > 0) {
+
+      chunks.push(e.data);
+
+    }
+
   };
 
-  recorder.start();
-}
+  await createAnalyzer(stream);
 
-export function stopRecording() {
+  recorder.start();
+
+  console.log("🎤 Recording Started");
+
   return new Promise((resolve) => {
+
+    volumeTimer = setInterval(() => {
+
+      const volume = getVolume();
+      onVolume(volume);
+
+      console.log(
+        "🎤",
+        volume.toFixed(3)
+      );
+
+      detectSilence(volume, () => {
+
+        console.log("🤫 Silence");
+
+        recorder.stop();
+
+      });
+
+    }, 100);
+
     recorder.onstop = () => {
+
+      console.log("🛑 Recording Stopped");
+
+      clearInterval(volumeTimer);
+
+      resetSilenceDetection();
+
+      destroyAnalyzer();
+
+      stream.getTracks().forEach(track => track.stop());
+
       const blob = new Blob(chunks, {
         type: "audio/webm",
       });
 
       resolve(blob);
+
     };
 
-    recorder.stop();
   });
+
 }

@@ -2,40 +2,47 @@ import { normalizeApp } from "./normalizer.js";
 import { normalizeWebsite } from "./websiteNormalizer.js";
 import { WEBSITES } from "../tools/browser/websites.js";
 
-
 export function detectIntent(message) {
 
-  const text = message.toLowerCase().trim();
+  const text = message
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s]/g, "");
 
-  // search command
-  if (text.startsWith("search ")) {
+  // ---------------- SEARCH ----------------
 
-    const query = message.replace(/^search/i, "").trim();
+  const searchMatch = text.match(
+    /(?:please\s+)?(?:can\s+you\s+)?(?:search)\s+(.+)/i
+  );
+
+  if (searchMatch) {
 
     return {
-        type: "tool",
-        tool: "search_google",
-        arguments: {
-            query,
-        },
+      type: "tool",
+      tool: "search_google",
+      arguments: {
+        query: searchMatch[1].trim(),
+      },
     };
-}
 
-  // Open command
-  if (text.startsWith("open ")) {
+  }
 
-   let target = text
-  .replace("open ", "")
-  .trim()
-  .toLowerCase()
-  .replace(/[^\w\s]/g, "");
+  // ---------------- OPEN ----------------
 
-  target = target.replace(/(.+)\s+\1$/i, "$1");
+  const openMatch = text.match(
+    /(?:please\s+)?(?:can\s+you\s+)?(?:could\s+you\s+)?(?:nika\s+)?open\s+(.+)/i
+  );
 
-  target = normalizeWebsite(target);
+  if (openMatch) {
 
-    // Website
+    let target = openMatch[1]
+      .trim()
+      .replace(/^the\s+/i, "");
+
+    target = normalizeWebsite(target);
+
     if (WEBSITES[target]) {
+
       return {
         type: "tool",
         tool: "open_website",
@@ -43,17 +50,23 @@ export function detectIntent(message) {
           site: target,
         },
       };
+
     }
 
-    // Desktop Application
     return {
+
       type: "tool",
+
       tool: "open_app",
+
       arguments: {
         app: normalizeApp(target),
       },
+
     };
+
   }
 
   return null;
+
 }
