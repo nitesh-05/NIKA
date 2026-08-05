@@ -1,8 +1,20 @@
+import { detectWakeWord } from "../intent/detectWakeWord.js";
+import { modeRouter } from "./modeRouter.js";
+import { getMode } from "./modeManager.js";
 import { createTask } from "./planner.js";
 import { executeTask } from "./executor.js";
 import { detectIntent } from "../intent/detectIntent.js";
 
 export async function runAgent(userMessage) {
+  const wakeWord = detectWakeWord(userMessage);
+
+if (wakeWord) {
+    return wakeWord;
+}
+
+const currentMode = getMode();
+
+console.log("Current Mode:", currentMode);
 
   const directIntent = detectIntent(userMessage);
 

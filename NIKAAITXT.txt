@@ -45,3 +45,13 @@ SpeechSynthesis API
 ↓
 
 🔊 AI speaks
+
+Trading agent
+
+| Purpose              | API                     |
+| -------------------- | ----------------------- |
+| Live Price           | Finnhub                 |
+| Technical Indicators | Alpha Vantage           |
+| Fundamentals         | Financial Modeling Prep |
+| Market News          | NewsAPI                 |
+| AI Analysis          | Groq                    |
